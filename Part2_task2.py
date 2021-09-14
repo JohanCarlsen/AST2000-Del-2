@@ -12,11 +12,9 @@ EGEN KODE !!!
 Skal plotte planetbanen til hjemplaneten med
 leapfrod-metoden
 """
-
 seed = utils.get_seed('antonabr')
 system = SolarSystem(seed)
 mission = SpaceMission(seed)
-
 AU = 149597871
 solar_mass = const.m_sun
 G_sol = const.G_sol         # In AU^3 / yr^2 / m_sun
@@ -53,8 +51,12 @@ def leapfrog():
         a = a_ipo
     return t, v, r
 
-t, v, r = leapfrog()
+if __name__=='__main__':
+    seed = utils.get_seed('antonabr')
+    system = SolarSystem(seed)
+    mission = SpaceMission(seed)
+    t, v, r = leapfrog()
 
-fig = plt.figure()
-plt.plot(r[:, 0], r[:, 1])
-plt.show()
+    fig = plt.figure()
+    plt.plot(r[:, 0], r[:, 1])
+    plt.show()

@@ -1,12 +1,9 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import ast2000tools.constants as const
-import ast2000tools.utils as utils
-from ast2000tools.solar_system import SolarSystem
-
 '''
 EGEN KODE
 '''
+
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Planets:
     def __init__(self, system, planet_number):
@@ -25,16 +22,17 @@ class Planets:
         theta = np.linspace(0,2*np.pi,101)
         x = self.r * np.cos(self.f)
         y = self.r * np.sin(self.f)
-        # plt.xlim(-30,30)
-        # plt.ylim(-30,30)
         plt.plot(x, y, label=f'# {number}')
+        plt.title('Ananlytic solution')
+        plt.xlabel('x')
+        plt.ylabel('y')
         plt.legend(loc='lower right')
 
 
-
-seed = utils.get_seed('antonabr')
-system = SolarSystem(seed)
-for i in range(8):
-    planet = Planets(system, i)
-    planet.plot(i+1)
-plt.show()
+if __name__=='__main__':
+    seed = utils.get_seed('antonabr')
+    system = SolarSystem(seed)
+    for i in range(8):
+        planet = Planets(system, i)
+        planet.plot(i+1)
+    plt.show()
