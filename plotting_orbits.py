@@ -4,6 +4,10 @@ import ast2000tools.constants as const
 import ast2000tools.utils as utils
 from ast2000tools.solar_system import SolarSystem
 
+'''
+EGEN KODE
+'''
+
 class Planets:
     def __init__(self, system, planet_number):
         self.system = system
