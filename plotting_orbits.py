@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import ast2000tools.constants as const
 import ast2000tools.utils as utils
 from ast2000tools.solar_system import SolarSystem
-
+test
 '''
 EGEN KODE
 '''
