@@ -28,7 +28,6 @@ class Planets_analytical:
         plt.ylabel('y')
         plt.legend(loc='lower right')
 
-
 if __name__=='__main__':
     seed = utils.get_seed('antonabr')
     system = SolarSystem(seed)

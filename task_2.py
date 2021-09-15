@@ -19,14 +19,14 @@ class Planets_numerical:
         self.star_mass_system = system.star_mass
         self.a_home_planet = system.semi_major_axes[0]
         self.P = np.sqrt(4*np.pi**2 / (self.G*(self.planet_mass + self.star_mass_system)) * self.a_home_planet**3)
-        self.v = np.zeros((int(np.ceil(int(np.ceil(self.P * 20)) * 10000)), 2))
-        self.r = np.zeros((int(np.ceil(int(np.ceil(self.P * 20)) * 10000)), 2))
+        self.total_time = int(np.ceil(self.P * 20))
+        self.time_steps = int(np.ceil(self.total_time * 10000))
+        self.v = np.zeros((self.time_steps, 2))
+        self.r = np.zeros((self.time_steps, 2))
 
     def leapfrog(self):
-        total_time = int(np.ceil(self.P * 20))
-        time_steps = int(np.ceil(total_time * 10000))
-        dt = total_time / time_steps
-        t = np.linspace(0, total_time, time_steps)
+        dt = self.total_time / self.time_steps
+        t = np.linspace(0, self.total_time, self.time_steps)
 
         self.v[0] = self.v_initial
         self.r[0] = self.r_initial
@@ -34,7 +34,7 @@ class Planets_numerical:
         r_norm = np.linalg.norm(self.r[0])
         a = -self.G*self.star_mass_system / r_norm**3 * self.r[0]
 
-        for i in range(time_steps-1):
+        for i in range(self.time_steps-1):
             self.r[i+1] = self.r[i] + self.v[i]*dt + 0.5*a*dt**2
             r_norm = np.linalg.norm(self.r[i+1])
             a_ipo = -self.G*self.star_mass_system / r_norm**3 * self.r[i+1]
@@ -49,7 +49,6 @@ class Planets_numerical:
         plt.xlabel('x')
         plt.ylabel('v')
         plt.legend(loc='lower right')
-
 
 if __name__=='__main__':
     seed = utils.get_seed('antonabr')
