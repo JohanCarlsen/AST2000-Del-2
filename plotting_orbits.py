@@ -5,7 +5,7 @@ EGEN KODE
 import numpy as np
 import matplotlib.pyplot as plt
 
-class Planets:
+class Planets_analytical:
     def __init__(self, system, planet_number):
         self.system = system
         self.e = system.eccentricities[planet_number]
