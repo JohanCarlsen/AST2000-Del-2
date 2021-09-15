@@ -42,11 +42,18 @@ plt.savefig('numerical-and-analytical.png')
 
 plt.show()
 
-# N = planet_numerical.time_steps
-#
-# r_all = np.zeros((2, 8, N))
-# for i in range(8):
-#     planet = Planets_numerical(system, i)
-#     r_all[:,i,:] = planet.r[:,:].T
-#
-# system.verify_planet_positions(planet_numerical.total_time, r_all)
+r_home_planet = planet_numerical.r
+t_home_planet = planet_numerical.t
+v_home_planet = planet_numerical.v
+np.save('position_vector_home_planet', r_home_planet)
+np.save('time_home_planet', t_home_planet)
+np.save('velocity_home_planet', v_home_planet)
+
+
+'''
+r = np.linspace(0,10,10)
+print(r)
+np.save('array', r)
+r_load = np.load('array.npy')
+print(r_load)
+'''

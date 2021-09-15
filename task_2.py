@@ -23,10 +23,10 @@ class Planets_numerical:
         self.time_steps = int(np.ceil(self.total_time * 10000))
         self.v = np.zeros((self.time_steps, 2))
         self.r = np.zeros((self.time_steps, 2))
+        self.t = np.linspace(0, self.total_time, self.time_steps)
 
     def leapfrog(self):
         dt = self.total_time / self.time_steps
-        t = np.linspace(0, self.total_time, self.time_steps)
 
         self.v[0] = self.v_initial
         self.r[0] = self.r_initial
@@ -40,10 +40,10 @@ class Planets_numerical:
             a_ipo = -self.G*self.star_mass_system / r_norm**3 * self.r[i+1]
             self.v[i+1] = self.v[i] + 0.5*(a + a_ipo)*dt
             a = a_ipo
-        return t, self.v, self.r
+        return self.v, self.r
 
     def plot(self, func, number):
-        t, v, r = func
+        v, r = func
         plt.plot(r[:,0],r[:,1], label='Numerical #1')
         plt.title('Numerical orbits')
         plt.xlabel('x')
