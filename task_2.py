@@ -33,7 +33,7 @@ class Planets_numerical:
         r_norm = np.linalg.norm(r[0])
         a = -self.G*self.star_mass_system / r_norm**3 * r[0]
 
-        for i in range(time_steps):
+        for i in range(time_steps-1):
             r[i+1] = r[i] + v[i]*dt + 0.5*a*dt**2
             r_norm = np.linalg.norm(r[i+1])
             a_ipo = -self.G*self.star_mass_system / r_norm**3 * r[i+1]
@@ -43,7 +43,12 @@ class Planets_numerical:
 
     def plot(self, func, number):
         t, v, r = func
-        plt.plot(r[:,0],r[:,1])
+        plt.plot(r[:,0],r[:,1], label='Numerical #1')
+        plt.title('Numerical orbits')
+        plt.xlabel('x')
+        plt.ylabel('v')
+        plt.legend(loc='lower right')
+
 
 if __name__=='__main__':
     seed = utils.get_seed('antonabr')
