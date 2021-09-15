@@ -18,8 +18,8 @@ class Planets_numerical:
         self.planet_mass = system.masses[planet_number]
         self.star_mass_system = system.star_mass
 
-    def leapfog(self):
-        total time = 100
+    def leapfrog(self):
+        total_time = 100
         time_steps = 100000
         dt = total_time / time_steps
         t = np.linspace(0, total_time, time_steps)
@@ -31,12 +31,12 @@ class Planets_numerical:
         r[0] = self.r_initial
 
         r_norm = np.linalg.norm(r[0])
-        a = -self.G_sol*self.star_mass_system / r_norm**3 * r[0]
+        a = -self.G*self.star_mass_system / r_norm**3 * r[0]
 
         for i in range(time_steps):
             r[i+1] = r[i] + v[i]*dt + 0.5*a*dt**2
             r_norm = np.linalg.norm(r[i+1])
-            a_ipo = -self.G_sol*self.star_mass_system / r_norm**3 * r[i+1]
+            a_ipo = -self.G*self.star_mass_system / r_norm**3 * r[i+1]
             v[i+1] = v[i] + 0.5*(a + a_ipo)*dt
             a = a_ipo
         return t, v, r
@@ -44,3 +44,11 @@ class Planets_numerical:
     def plot(self, func, number):
         t, v, r = func
         plt.plot(r[:,0],r[:,1])
+
+if __name__=='__main__':
+    seed = utils.get_seed('antonabr')
+    system = SolarSystem(seed)
+    for i in range(8):
+        planet = Planets_numerical(system, i)
+        planet.plot(planet.leapfrog(), i)
+    plt.show()
