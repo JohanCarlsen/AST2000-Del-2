@@ -5,6 +5,9 @@ import ast2000tools.constants as const
 import ast2000tools.utils as utils
 from ast2000tools.solar_system import SolarSystem
 from ast2000tools.space_mission import SpaceMission
+import time
+
+time1 = time.time()
 
 class Planets_numerical:
     def __init__(self, system, planet_number):
@@ -21,30 +24,33 @@ class Planets_numerical:
         self.P = np.sqrt(4*np.pi**2 / (self.G*(self.planet_mass + self.star_mass_system)) * self.a_home_planet**3)
         self.total_time = int(np.ceil(self.P * 20))
         self.time_steps = int(np.ceil(self.total_time * 10000))
-        self.v = np.zeros((self.time_steps, 2))
-        self.r = np.zeros((self.time_steps, 2))
         self.t = np.linspace(0, self.total_time, self.time_steps)
 
     def leapfrog(self):
-        dt = self.total_time / self.time_steps
+        total_time, time_steps = self.total_time, self.time_steps
+        v_initial, r_initial, G, star_mass_system = self.v_initial, self.r_initial, self.G, self.star_mass_system
 
-        self.v[0] = self.v_initial
-        self.r[0] = self.r_initial
+        @njit
+        def run():
+            v = np.zeros((time_steps,2))
+            r = np.zeros((time_steps,2))
+            v[0] = v_initial
+            r[0] = r_initial
+            dt = total_time / time_steps
+            r_norm = np.linalg.norm(r[0])
+            a = -G*star_mass_system / r_norm**3 * r[0]
 
-        r_norm = np.linalg.norm(self.r[0])
-        a = -self.G*self.star_mass_system / r_norm**3 * self.r[0]
+            for i in range(time_steps-1):
+                r[i+1] = r[i] + v[i]*dt + 0.5*a*dt**2
+                r_norm = np.linalg.norm(r[i+1])
+                a_ipo = -G*star_mass_system / r_norm**3 * r[i+1]
+                v[i+1] = v[i] + 0.5*(a + a_ipo)*dt
+                a = a_ipo
+            return v, r
+        self.v, self.r = run()
 
-        for i in range(self.time_steps-1):
-            self.r[i+1] = self.r[i] + self.v[i]*dt + 0.5*a*dt**2
-            r_norm = np.linalg.norm(self.r[i+1])
-            a_ipo = -self.G*self.star_mass_system / r_norm**3 * self.r[i+1]
-            self.v[i+1] = self.v[i] + 0.5*(a + a_ipo)*dt
-            a = a_ipo
-        return self.v, self.r
-
-    def plot(self, func, number):
-        v, r = func
-        plt.plot(r[:,0],r[:,1], label='Numerical #1')
+    def plot(self, number):
+        plt.plot(self.r[:,0],self.r[:,1], label=f'Numerical #{number}')
         plt.title('Numerical orbits')
         plt.xlabel('x')
         plt.ylabel('v')
@@ -55,5 +61,8 @@ if __name__=='__main__':
     system = SolarSystem(seed)
     for i in range(8):
         planet = Planets_numerical(system, i)
-        planet.plot(planet.leapfrog(), i)
+        planet.leapfrog()
+        planet.plot(i)
+        time2 = time.time()
+    print(time2-time1)
     plt.show()
