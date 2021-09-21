@@ -20,6 +20,7 @@ plt.figure()
 for i in range(8):
     planet = Planets_analytical(system, i)
     planet.plot(i+1)
+plt.title('Analytic orbits')
 plt.savefig('analytical-orbits.jpg')
 
 # task 2
@@ -28,7 +29,18 @@ for i in range(8):
     planet = Planets_numerical(system, i)
     planet.leapfrog()
     planet.plot(i+1)
+plt.title('Numerical orbits')
 plt.savefig('numerical-orbits.png')
+
+plt.figure()
+for i in range(8):
+    planet = Planets_analytical(system, i)
+    planet.plot(i+1)
+    planet = Planets_numerical(system, i)
+    planet.leapfrog()
+    planet.plot(i+1)
+plt.title('Numerical and analytical orbits')
+plt.savefig('numerical-and-analytical-solar-system.png')
 
 plt.figure()
 planet_analytical = Planets_analytical(system, 0)
