@@ -50,11 +50,10 @@ class Planets_numerical:
         self.v, self.r = run()
 
     def plot(self, number):
-        plt.plot(self.r[:,0],self.r[:,1], label=f'Numerical #{number}')
+        plt.plot(self.r[:,0],self.r[:,1])
         plt.title('Numerical orbits')
-        plt.xlabel('x')
-        plt.ylabel('v')
-        plt.legend(loc='lower right')
+        plt.xlabel('x [AU]')
+        plt.ylabel('v [AU]')
 
 if __name__=='__main__':
     seed = utils.get_seed('antonabr')

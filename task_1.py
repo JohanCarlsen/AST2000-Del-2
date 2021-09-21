@@ -22,11 +22,10 @@ class Planets_analytical:
         theta = np.linspace(0,2*np.pi,101)
         x = self.r * np.cos(self.f)
         y = self.r * np.sin(self.f)
-        plt.plot(x, y, label=f'Analytical # {number}')
-        plt.title('Ananlytic orbits')
-        plt.xlabel('x')
-        plt.ylabel('y')
-        plt.legend(loc='lower right')
+        plt.plot(x, y)
+        plt.title('Analytic orbits')
+        plt.xlabel('x [AU]')
+        plt.ylabel('y [AU]')
 
 if __name__=='__main__':
     seed = utils.get_seed('antonabr')

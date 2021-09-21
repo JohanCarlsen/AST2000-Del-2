@@ -36,26 +36,9 @@ planet_analytical.plot(1)
 planet_numerical = Planets_numerical(system, 0)
 planet_numerical.leapfrog()
 planet_numerical.plot(1)
-plt.legend()
 plt.title('Numerical and analytical')
-plt.xlabel('x')
-plt.ylabel('y')
+plt.xlabel('x [AU]')
+plt.ylabel('y [AU]')
 plt.savefig('numerical-and-analytical.png')
 
 plt.show()
-
-r_home_planet = planet_numerical.r
-t_home_planet = planet_numerical.t
-v_home_planet = planet_numerical.v
-np.save('position_vector_home_planet', r_home_planet)
-np.save('time_home_planet', t_home_planet)
-np.save('velocity_home_planet', v_home_planet)
-
-
-'''
-r = np.linspace(0,10,10)
-print(r)
-np.save('array', r)
-r_load = np.load('array.npy')
-print(r_load)
-'''
