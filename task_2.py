@@ -22,7 +22,7 @@ class Planets_numerical:
         self.star_mass_system = system.star_mass
         self.a_home_planet = system.semi_major_axes[0]
         self.P = np.sqrt(4*np.pi**2 / (self.G*(self.planet_mass + self.star_mass_system)) * self.a_home_planet**3)
-        self.total_time = int(np.ceil(self.P * 20))
+        self.total_time = int(np.ceil(self.P * 20)) * 2
         self.time_steps = int(np.ceil(self.total_time * 10000))
         self.t = np.linspace(0, self.total_time, self.time_steps)
 
@@ -51,7 +51,6 @@ class Planets_numerical:
 
     def plot(self, number):
         plt.plot(self.r[:,0],self.r[:,1])
-        plt.title('Numerical orbits')
         plt.xlabel('x [AU]')
         plt.ylabel('v [AU]')
 

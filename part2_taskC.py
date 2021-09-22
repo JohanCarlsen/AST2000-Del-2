@@ -48,7 +48,7 @@ reduced_mass = planet_mass * star_mass_system / (planet_mass + star_mass_system)
 # Funksjon som løser tolegemeproblemet fra koordinatsystem med massesenteret i origo
 @njit(cache=True)
 def twobodyproblem(v1_cm_initial, r1_cm_initial, v2_cm_initial, r2_cm_initial):
-    revolutions = 1
+    revolutions = 5
     total_time = revolutions * planet_P_time         # years, (P^2 = 4pi^2(a1 + a2)^3 / (G(m1 + m2))) for home planet
     time_steps = int(total_time * 10000)     # 10 000 pr. year
     dt = total_time / time_steps
@@ -116,4 +116,6 @@ plt.plot(r2_cm[:,0], r2_cm[:,1], 'b')
 plt.xlabel('x (AU)')
 plt.ylabel('y (AU)')
 # plt.axis('equal')
-plt.show()
+# plt.show()
+np.save('star-velocity-array', v1_cm)
+np.save('star-time-array', t)
