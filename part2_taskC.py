@@ -21,16 +21,13 @@ seed = utils.get_seed('antonabr')
 system = SolarSystem(seed)
 mission = SpaceMission(seed)
 
-AU = 149597871
-solar_mass = const.m_sun
 G_sol = const.G_sol         # In AU^3 / yr^2 / m_sun
-yr = 365*24*60*60
 planet_number = 7       # Planet 7 er en god kandidat i solsystemet vårt
-system.print_info()
+# system.print_info()
 # Planet info
 planet_radius = system.radii[planet_number]
 planet_mass = system.masses[planet_number]
-# planet_mass = 1
+# planet_mass = 1   # Sjekker banene med større masse
 planet_axis = system.semi_major_axes[planet_number]
 P_planet = system.rotational_periods[planet_number] / 365     # Dager
 
