@@ -35,7 +35,7 @@ star_mass_system = system.star_mass
 star_radii_system = system.star_radius
 
 planet_P_time = np.sqrt(4*np.pi**2*planet_axis**3 / (G_sol*(star_mass_system + planet_mass)))
-
+print(f'total time of orbit for home-planet is {planet_P_time}years\n')
 reduced_mass = planet_mass * star_mass_system / (planet_mass + star_mass_system)
 # P^2 = 4pi^2(a1 + a2)^3 / (G(m1 + m2)) used for period of home planet
 
@@ -46,7 +46,7 @@ reduced_mass = planet_mass * star_mass_system / (planet_mass + star_mass_system)
 def twobodyproblem(v1_cm_initial, r1_cm_initial, v2_cm_initial, r2_cm_initial):
     revolutions = 1
     total_time = revolutions * planet_P_time         # years, (P^2 = 4pi^2(a1 + a2)^3 / (G(m1 + m2))) for home planet
-    time_steps = int(total_time * 10000)     # 10 000 pr. year
+    time_steps = int(total_time * 11000)     # 10 000 pr. year
     dt = total_time / time_steps
     t = np.linspace(0, total_time, time_steps)
     T = 0
@@ -54,7 +54,7 @@ def twobodyproblem(v1_cm_initial, r1_cm_initial, v2_cm_initial, r2_cm_initial):
     Ek_tot = np.zeros(time_steps)
     Ep_tot = np.zeros(time_steps)
 
-    r1_cm = np.zeros((time_steps, 2))
+    r1_cm = np.zeros((time_steps, 2))       # Lager arrays som skal lagre posisjonen i massesenterkoordinatsystemet
     v1_cm = np.zeros((time_steps, 2))
     r1_cm[0] = r1_cm_initial
     v1_cm[0] = v1_cm_initial
@@ -71,8 +71,9 @@ def twobodyproblem(v1_cm_initial, r1_cm_initial, v2_cm_initial, r2_cm_initial):
     a1 = G_sol * planet_mass / r_norm**2 * r_hat
     a2 = -G_sol * star_mass_system / r_norm**2 * r_hat
 
+    v1_cm_norm = np.linalg.norm(v1_cm[0])
     v2_cm_norm = np.linalg.norm(v2_cm[0])
-    v = planet_mass * v2_cm_norm / reduced_mass
+    v = planet_mass * v2_cm_norm / reduced_mass     # Fra likningen v_2_cm = mu / m_2 * v
     Ek_tot[0] = 0.5*reduced_mass*v**2
     Ep_tot[0] = -G_sol*(planet_mass + star_mass_system)*reduced_mass / r_norm
 
@@ -91,8 +92,8 @@ def twobodyproblem(v1_cm_initial, r1_cm_initial, v2_cm_initial, r2_cm_initial):
         v1_cm_norm = np.linalg.norm(v1_cm[i+1])
         v2_cm_norm = np.linalg.norm(v2_cm[i+1])
 
-        v = planet_mass * v2_cm_norm / reduced_mass
-
+        v = planet_mass * v2_cm_norm / reduced_mass     # Fra likningen v_2_cm = mu / m_2 * v
+        # Regner ut kinetisk og potensiell energi i systemet
         Ek_tot[i+1] = 0.5*reduced_mass*v**2
         Ep_tot[i+1] = -G_sol*(planet_mass + star_mass_system)*reduced_mass / r_norm
 
@@ -143,9 +144,18 @@ plt.show()
 
 
 # plt.style.use('dark_background')
-plt.plot(r1_cm[:,0], r1_cm[:,1], 'r')
-plt.plot(r2_cm[:,0], r2_cm[:,1], 'royalblue')
-plt.xlabel('x [AU])')
-plt.ylabel('y [AU]')
-# plt.axis('equal')
+fig = plt.figure()
+gs = fig.add_gridspec(1,2)
+ax1 = fig.add_subplot(gs[0,0])
+ax2 = fig.add_subplot(gs[0,1])
+ax1.plot(r2_cm[:,0], r2_cm[:,1], 'royalblue')
+ax1.plot(r1_cm[:,0], r1_cm[:,1], 'r')
+ax2.plot(r1_cm[:,0], r1_cm[:,1], 'r')
+ax1.set_xlabel('x [AU]', weight='bold')
+ax1.set_ylabel('y [AU]', weight='bold')
+ax2.set_xlabel('x [AU]', weight='bold')
+ax2.set_ylabel('y [AU]', weight='bold')
+ax1.axis('equal')
+ax2.axis('equal')
+fig.tight_layout()
 plt.show()

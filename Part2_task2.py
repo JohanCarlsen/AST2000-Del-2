@@ -13,13 +13,14 @@ Anton Brekke
 OBS: litt Norsk og Engelsk i kommentarer, noen ganger går hodet i Engelsk,
 andre ganger i Norsk :))))
 Skal plotte planetbanen til hjemplaneten med
-leapfrod-metoden
+leapfrod-metoden og generere orbit-video
 """
 
 seed = utils.get_seed('antonabr')
 system = SolarSystem(seed)
 mission = SpaceMission(seed)
 
+system.print_info()
 planet_number = 0
 G_sol = const.G_sol         # In AU^3 / yr^2 / m_sun
 planet_radius = system.radii[planet_number]
@@ -31,7 +32,6 @@ planet_P_time = np.sqrt(4*np.pi**2*axis**3 / (G_sol*(star_mass_system + planet_m
 print(f'total time of orbit for home-planet is {planet_P_time}years\n')
 
 # P^2 = 4pi^2(a1 + a2)^3 / (G(m1 + m2)) used for period of home planet
-
 
 time1 = time.time()
 
@@ -48,8 +48,8 @@ def leapfrog(v_initial, r_initial):
     T = 0
     len_traveled_dA1 = 0
     len_traveled_dA2 = 0
-    mean_velocity_dA1 = np.zeros((1,2))
-    mean_velocity_dA2 = np.zeros((1,2))
+    mean_velocity_dA1 = 0
+    mean_velocity_dA2 = 0
     if_count_1 = 0      # Tellere vi trenger senere
     if_count_2 = 0
 
@@ -75,30 +75,30 @@ def leapfrog(v_initial, r_initial):
         if T > 0 and T < total_time / (10*revolutions):
             dA1 += 0.5*r_norm**2*dtheta
             len_traveled_dA1 += r_norm*dtheta
-            mean_velocity_dA1 += v[i]
+            mean_velocity_dA1 += v_norm
             if_count_1 += 1
 
-        if T > total_time / (2*revolutions) and T < total_time / (2*revolutions) + total_time / (10*revolutions):
+        if T > total_time / (2*revolutions) - total_time / (10*revolutions) and T < total_time / (2*revolutions):
             dA2 += 0.5*r_norm**2*dtheta
             len_traveled_dA2 += r_norm*dtheta
-            mean_velocity_dA2 += v[i]
+            mean_velocity_dA2 += v_norm
             if_count_2 += 1
 
         T += dt
     mean_velocity_dA1 = mean_velocity_dA1 / if_count_1
     mean_velocity_dA2 = mean_velocity_dA2 / if_count_2
-    print('max distance from sun : ', max(abs(np.min(r)), np.max(r)))
+    print('max distance from sun : ', max(abs(np.min(r)), np.max(r)), 'AU')
 
     # Unngår f-strings fordi Numba ikke liker dem, printer all relevant info
     print('Area T1 : ', dA1)
     print('length traveled T1 : ', len_traveled_dA1, 'AU')
-    print('mean velocity T1 : ', mean_velocity_dA1, 'AU/yr')
+    print('mean velocity T1 : ', mean_velocity_dA1, 'AU/yr', mean_velocity_dA1*17066.0582, 'km/h')
     print('--')
     print('Area T2 : ', dA2)
     print('length traveled T2 : ', len_traveled_dA2, 'AU,')
-    print('mean velocity T2 : ', mean_velocity_dA2, 'AU/yr')
+    print('mean velocity T2 : ', mean_velocity_dA2, 'AU/yr', mean_velocity_dA2*17066.0582, 'km/h')
     print('--')
-    print('Relative error : ', abs(dA2 - dA1) / dA1 * 100, '%')
+    print('Relative error : ', abs(dA2 - dA1) / dA1)
     print('Percentage min val of max val : ', min([dA1, dA2]) / max([dA1, dA2]) * 100, '%')
     print('')
     return t, v, r
@@ -157,6 +157,9 @@ planet 4 : 1401.6447852220829
 for planet_number in range(8):
     planet_mass = system.masses[planet_number]
     axis = system.semi_major_axes[planet_number]
+    print(star_mass_system + planet_mass)
+
     Newton_P_planet = np.sqrt(4*np.pi**2*axis**3 / (G_sol*(star_mass_system + planet_mass)))  # Keplers 3.lov
     Kepler_P_planet = np.sqrt(axis**3) # Keplers 3.lov
-    print(f'Planet {planet_number} -- \nNewton : {Newton_P_planet}\nKepler : {Kepler_P_planet}\n')
+    prop_to =  Newton_P_planet / Kepler_P_planet
+    print(f'Planet {planet_number} -- \nNewton : {Newton_P_planet}\nKepler : {Kepler_P_planet}\nRelation : {prop_to}')
