@@ -1,6 +1,9 @@
 '''
 EGEN KODE!
-MAIN code
+MAIN code.
+Classes from challenge_A_1 and challenge_A_2 are imported and run from this code.
+Perhaps not the most effective way, but I tried something new.
+
 '''
 
 import numpy as np
@@ -9,48 +12,54 @@ import ast2000tools.utils as utils
 from ast2000tools.solar_system import SolarSystem
 from ast2000tools.space_mission import SpaceMission
 
-from task_2 import Planets_numerical
-from task_1 import Planets_analytical
+from challenge_A_2 import Planets_numerical
+from challenge_A_1 import Planets_analytical
 
 seed = utils.get_seed('antonabr')
 system = SolarSystem(seed)
 
-# task 1
+'''
+In every following loop, for Planets_analytical, the argument
+can be either planet.r or planet.r_corrected.
+The self.r is without correction for the aphelion angle.
+'''
+
+
+# challenge A1
 plt.figure()
 for i in range(8):
     planet = Planets_analytical(system, i)
-    planet.plot(i+1)
+    planet.plot(planet.r)
 plt.title('Analytic orbits')
-plt.savefig('analytical-orbits.jpg')
+# plt.savefig('analytical-orbits-unrotated.jpg')
 
-# task 2
+# challenge A2
 plt.figure()
 for i in range(8):
     planet = Planets_numerical(system, i)
     planet.leapfrog()
-    planet.plot(i+1)
+    planet.plot()
 plt.title('Numerical orbits')
-plt.savefig('numerical-orbits.png')
+# plt.savefig('numerical-orbits.png')
 
 plt.figure()
 for i in range(8):
     planet = Planets_analytical(system, i)
-    planet.plot(i+1)
+    planet.plot(planet.r)
     planet = Planets_numerical(system, i)
     planet.leapfrog()
-    planet.plot(i+1)
+    planet.plot()
 plt.title('Numerical and analytical orbits')
-plt.savefig('numerical-and-analytical-solar-system.png')
+# plt.savefig('numerical-and-analytical-solar-system-unrotated.png')
 
 plt.figure()
-planet_analytical = Planets_analytical(system, 0)
-planet_analytical.plot(1)
-planet_numerical = Planets_numerical(system, 0)
-planet_numerical.leapfrog()
-planet_numerical.plot(1)
-plt.title('Numerical and analytical')
-plt.xlabel('x [AU]')
-plt.ylabel('y [AU]')
-plt.savefig('numerical-and-analytical.png')
+for i in range(8):
+    planet = Planets_analytical(system, i)
+    planet.plot(planet.r_corrected)
+    planet = Planets_numerical(system, i)
+    planet.leapfrog()
+    planet.plot()
+plt.title('Numerical and analytical orbits')
+# plt.savefig('numerical-and-analytical-solar-system.png')
 
 plt.show()
