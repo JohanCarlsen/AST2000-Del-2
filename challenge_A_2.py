@@ -7,6 +7,10 @@ from ast2000tools.solar_system import SolarSystem
 from ast2000tools.space_mission import SpaceMission
 import time
 
+"""
+EGEN KODE
+"""
+
 time1 = time.time()
 
 class Planets_numerical:

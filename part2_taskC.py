@@ -122,6 +122,7 @@ v1_cm_initial = v1_initial - V_cm_initial
 r2_cm_initial = r2_initial - R_cm_initial
 v2_cm_initial = v2_initial - V_cm_initial
 
+# Henter alle verdier fra funksjonskall
 t, v1_cm, r1_cm, v2_cm, r2_cm, Ek_tot, Ep_tot = twobodyproblem(v1_cm_initial, r1_cm_initial, v2_cm_initial, r2_cm_initial)
 
 # Plotter energikurver
@@ -142,7 +143,7 @@ ax3.set_xlabel('time [yr]'); ax3.set_ylabel(r'Energy $\left[\frac{AU^2 M\odot}{y
 fig.tight_layout()
 plt.show()
 
-
+# Plotter banene til stjerna og sola
 # plt.style.use('dark_background')
 fig = plt.figure()
 gs = fig.add_gridspec(1,2)

@@ -111,12 +111,14 @@ t = np.linspace(0, total_time, time_steps)
 
 # Array som skal inneholde alle x og y posisjoner i alle tidssteg for alle planeter
 r_all = np.zeros((2, 8, time_steps))
+v_all = np.zeros((2, 8, time_steps))
 for i in range(8):
     v_initial = system.initial_velocities[:,i]
     r_initial = system.initial_positions[:,i]
     t, v, r = leapfrog(v_initial, r_initial)
     plt.plot(r[:, 0], r[:, 1], label=f'Planet {i}')
     r_all[:,i,:] = r[:,:].transpose(1,0)
+    v_all[:,i,:] = v[:,:].transpose(1,0)
 
 time2 = time.time()
 print(f'Ran in {time2 - time1}s')
